@@ -20,7 +20,7 @@ jobs:
       - name: Run 16-task Gemini API pilot
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python pilot.py
+        run: python run_pilot.py
 
       - name: Commit result readback
         run: |
