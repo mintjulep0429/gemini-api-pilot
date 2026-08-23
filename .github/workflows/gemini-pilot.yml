@@ -1,0 +1,36 @@
+name: Gemini Real Provider Pilot
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gemini-pilot.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run 16-task Gemini API pilot
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python pilot.py
+
+      - name: Commit result readback
+        run: |
+          git config user.name "gemini-pilot-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/latest.json
+          if git diff --cached --quiet; then
+            echo "No result delta"
+          else
+            git commit -m "Record Gemini real-provider pilot result"
+            git push
+          fi
