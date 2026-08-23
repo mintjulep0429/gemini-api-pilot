@@ -17,10 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run single-call Gemini API pilot
+      - name: Run single-call Gemini 3.1 Flash-Lite API pilot
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python single_call_pilot.py
+        run: python lite_single_call.py
 
       - name: Commit result readback
         if: always()
@@ -32,7 +32,7 @@ jobs:
             if git diff --cached --quiet; then
               echo "No result delta"
             else
-              git commit -m "Record Gemini single-call pilot result"
+              git commit -m "Record Gemini 3.1 Flash-Lite single-call pilot result"
               git push
             fi
           else
