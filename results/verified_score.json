@@ -1,0 +1,38 @@
+{
+  "source": "results/latest.json",
+  "model": "gemini-3.1-flash-lite",
+  "mode": "single_api_call_16_held_out_tasks",
+  "api_status": "API_OK",
+  "automated_exact_score": {
+    "passes": 13,
+    "total": 16,
+    "rate": 0.8125
+  },
+  "verified_semantic_score": {
+    "passes": 14,
+    "total": 16,
+    "rate": 0.875
+  },
+  "scoring_correction": {
+    "task_id": "code_repair_02",
+    "model_answer": "(status <> 'closed' OR status IS NULL)",
+    "expected_semantics": "status <> 'closed' OR status IS NULL",
+    "decision": "PASS",
+    "reason": "Outer parentheses do not change SQL boolean semantics; the original exact-string validator produced a false negative."
+  },
+  "remaining_true_failures": [
+    {
+      "task_id": "data_analysis_04",
+      "model_answer": 0.59,
+      "correct_answer": 0.58,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "mixed_02",
+      "model_answer": "RETRY",
+      "correct_answer": "RECONCILE",
+      "decision": "FAIL"
+    }
+  ],
+  "truth_boundary": "This file rescored the already-recorded real API response deterministically; it did not issue another model request."
+}
