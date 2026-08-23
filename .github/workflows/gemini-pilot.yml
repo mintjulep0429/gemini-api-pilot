@@ -1,18 +1,16 @@
 name: Gemini Real Provider Pilot
 
-# Trigger refresh 2026-08-23
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/gemini-pilot.yml'
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
 
 jobs:
   pilot:
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == 'RUN_GEMINI_REAL_PROVIDER_PILOT'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
