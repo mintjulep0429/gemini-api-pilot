@@ -10,26 +10,32 @@ permissions:
 
 jobs:
   pilot:
-    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == 'RUN_GEMINI_REAL_PROVIDER_PILOT'
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == 'RUN_GEMINI_SINGLE_CALL_PILOT'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run 16-task Gemini API pilot
+      - name: Run single-call Gemini API pilot
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python run_pilot.py
+        run: python single_call_pilot.py
 
       - name: Commit result readback
+        if: always()
         run: |
           git config user.name "gemini-pilot-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add results/latest.json
-          if git diff --cached --quiet; then
-            echo "No result delta"
+          if [ -f results/latest.json ]; then
+            git add results/latest.json
+            if git diff --cached --quiet; then
+              echo "No result delta"
+            else
+              git commit -m "Record Gemini single-call pilot result"
+              git push
+            fi
           else
-            git commit -m "Record Gemini 3.6 real-provider pilot result"
-            git push
+            echo "results/latest.json missing"
+            exit 1
           fi
