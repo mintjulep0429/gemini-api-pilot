@@ -1,15 +1,153 @@
 {
   "summary": {
-    "model": "gemini-3.6-flash",
+    "model": "gemini-3.1-flash-lite",
     "mode": "single_api_call_16_held_out_tasks",
     "task_count": 16,
-    "executed_utc": "2026-08-23T13:38:08.813414+00:00",
+    "executed_utc": "2026-08-23T18:06:11.790795+00:00",
     "truth_boundary": "One real Gemini API call; no tools/grounding supplied; no Claude/OpenAI call.",
-    "cost_guard": "Gemini 3.6 Flash Free Tier + public standard GitHub-hosted runner; no billing setup invoked.",
-    "status": "API_ERROR",
-    "passes": 0,
-    "pass_rate": 0.0
+    "cost_guard": "Gemini 3.1 Flash-Lite Free Tier + public standard GitHub-hosted runner; no billing setup invoked.",
+    "status": "API_OK",
+    "passes": 13,
+    "pass_rate": 0.8125,
+    "family": {
+      "code_repair": {
+        "passes": 3,
+        "total": 4,
+        "rate": 0.75
+      },
+      "data_analysis": {
+        "passes": 3,
+        "total": 4,
+        "rate": 0.75
+      },
+      "research_evidence": {
+        "passes": 4,
+        "total": 4,
+        "rate": 1.0
+      },
+      "mixed_long_horizon": {
+        "passes": 3,
+        "total": 4,
+        "rate": 0.75
+      }
+    },
+    "usage": {
+      "promptTokenCount": 1447,
+      "candidatesTokenCount": 231,
+      "totalTokenCount": 1678,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1447
+        }
+      ],
+      "serviceTier": "standard"
+    }
   },
-  "results": [],
-  "diagnostic": "RuntimeError('Gemini HTTP 429: {\\n  \"error\": {\\n    \"code\": 429,\\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\\\nPlease retry in 20.752133238s.\",\\n    \"status\": \"RESOURCE_EXHAUSTED\",\\n    \"details\": [\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\\n        \"links\": [\\n          {\\n            \"description\": \"Learn more about Gemini API quotas\",\\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\\n          }\\n        ]\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",\\n        \"violations\": [\\n          {\\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\\n            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\\n            \"quotaDimensions\": {\\n              \"location\": \"global\",\\n              \"model\": \"gemini-3.6-flash\"\\n            },\\n            \"quotaValue\": \"20\"\\n          }\\n        ]\\n      },\\n      {\\n        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",\\n        \"retryDelay\": \"20s\"\\n      }\\n    ]\\n  }\\n}\\n')"
+  "results": [
+    {
+      "task_id": "code_repair_01",
+      "family": "code_repair",
+      "pass": true,
+      "answer": "sum(x*x for x in xs if x % 2 == 0)"
+    },
+    {
+      "task_id": "code_repair_02",
+      "family": "code_repair",
+      "pass": false,
+      "answer": "(status <> 'closed' OR status IS NULL)"
+    },
+    {
+      "task_id": "code_repair_03",
+      "family": "code_repair",
+      "pass": true,
+      "answer": "if i > 0:"
+    },
+    {
+      "task_id": "code_repair_04",
+      "family": "code_repair",
+      "pass": true,
+      "answer": "user.id === requestedId"
+    },
+    {
+      "task_id": "data_analysis_01",
+      "family": "data_analysis",
+      "pass": true,
+      "answer": 92.5
+    },
+    {
+      "task_id": "data_analysis_02",
+      "family": "data_analysis",
+      "pass": true,
+      "answer": 50.0
+    },
+    {
+      "task_id": "data_analysis_03",
+      "family": "data_analysis",
+      "pass": true,
+      "answer": 75.0
+    },
+    {
+      "task_id": "data_analysis_04",
+      "family": "data_analysis",
+      "pass": false,
+      "answer": 0.59
+    },
+    {
+      "task_id": "evidence_01",
+      "family": "research_evidence",
+      "pass": true,
+      "answer": "E3"
+    },
+    {
+      "task_id": "evidence_02",
+      "family": "research_evidence",
+      "pass": true,
+      "answer": [
+        "E1",
+        "E2"
+      ]
+    },
+    {
+      "task_id": "evidence_03",
+      "family": "research_evidence",
+      "pass": true,
+      "answer": "NOT_SUPPORTED"
+    },
+    {
+      "task_id": "evidence_04",
+      "family": "research_evidence",
+      "pass": true,
+      "answer": "SIMULATION_ONLY"
+    },
+    {
+      "task_id": "mixed_01",
+      "family": "mixed_long_horizon",
+      "pass": true,
+      "answer": [
+        "A",
+        "B",
+        "D"
+      ]
+    },
+    {
+      "task_id": "mixed_02",
+      "family": "mixed_long_horizon",
+      "pass": false,
+      "answer": "RETRY"
+    },
+    {
+      "task_id": "mixed_03",
+      "family": "mixed_long_horizon",
+      "pass": true,
+      "answer": "CORRELATED"
+    },
+    {
+      "task_id": "mixed_04",
+      "family": "mixed_long_horizon",
+      "pass": true,
+      "answer": "NO_WINNER"
+    }
+  ],
+  "raw_response": "{\"answers\": {\"code_repair_01\": \"sum(x*x for x in xs if x % 2 == 0)\", \"code_repair_02\": \"(status <> 'closed' OR status IS NULL)\", \"code_repair_03\": \"if i > 0:\", \"code_repair_04\": \"user.id === requestedId\", \"data_analysis_01\": 92.5, \"data_analysis_02\": 50.0, \"data_analysis_03\": 75.0, \"data_analysis_04\": 0.59, \"evidence_01\": \"E3\", \"evidence_02\": [\"E1\", \"E2\"], \"evidence_03\": \"NOT_SUPPORTED\", \"evidence_04\": \"SIMULATION_ONLY\", \"mixed_01\": [\"A\", \"B\", \"D\"], \"mixed_02\": \"RETRY\", \"mixed_03\": \"CORRELATED\", \"mixed_04\": \"NO_WINNER\"}}"
 }
