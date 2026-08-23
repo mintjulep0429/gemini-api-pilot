@@ -1,5 +1,6 @@
 name: Gemini Real Provider Pilot
 
+# Trigger refresh 2026-08-23
 on:
   workflow_dispatch:
   push:
