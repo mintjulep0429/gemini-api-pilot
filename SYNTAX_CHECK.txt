@@ -1,0 +1,1 @@
+pilot.py syntax validated locally with ast.parse and py_compile before rerun.
