@@ -2,12 +2,6 @@ name: Gemini Real Provider Pilot
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'pilot.py'
-      - 'run_pilot.py'
-      - '.github/workflows/gemini-pilot.yml'
   issues:
     types: [opened]
 
@@ -16,7 +10,7 @@ permissions:
 
 jobs:
   pilot:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.issue.title == 'RUN_GEMINI_REAL_PROVIDER_PILOT'
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == 'RUN_GEMINI_REAL_PROVIDER_PILOT'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -36,6 +30,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No result delta"
           else
-            git commit -m "Record Gemini real-provider pilot result"
+            git commit -m "Record Gemini 3.6 real-provider pilot result"
             git push
           fi
