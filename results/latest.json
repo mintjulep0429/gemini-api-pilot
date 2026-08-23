@@ -1,0 +1,212 @@
+{
+  "summary": {
+    "model": "gemini-2.5-flash",
+    "task_count": 16,
+    "passes": 0,
+    "pass_rate": 0.0,
+    "family": {
+      "code_repair": {
+        "passes": 0,
+        "total": 4,
+        "rate": 0.0
+      },
+      "data_analysis": {
+        "passes": 0,
+        "total": 4,
+        "rate": 0.0
+      },
+      "research_evidence": {
+        "passes": 0,
+        "total": 4,
+        "rate": 0.0
+      },
+      "mixed_long_horizon": {
+        "passes": 0,
+        "total": 4,
+        "rate": 0.0
+      }
+    },
+    "usage_totals": {},
+    "executed_utc": "2026-08-23T12:44:34.247229+00:00",
+    "truth_boundary": "Real Gemini API calls only; no tools/grounding supplied; no Claude/OpenAI call.",
+    "cost_guard": "Gemini Free Tier + public standard GitHub-hosted runner; no billing setup invoked."
+  },
+  "results": [
+    {
+      "task_id": "code_repair_01",
+      "family": "code_repair",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.151,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "code_repair_02",
+      "family": "code_repair",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.227,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "code_repair_03",
+      "family": "code_repair",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.118,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "code_repair_04",
+      "family": "code_repair",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.13,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "data_analysis_01",
+      "family": "data_analysis",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.135,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "data_analysis_02",
+      "family": "data_analysis",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.12,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "data_analysis_03",
+      "family": "data_analysis",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.122,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "data_analysis_04",
+      "family": "data_analysis",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.128,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "evidence_01",
+      "family": "research_evidence",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.119,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "evidence_02",
+      "family": "research_evidence",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.135,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "evidence_03",
+      "family": "research_evidence",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.137,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "evidence_04",
+      "family": "research_evidence",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.137,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "mixed_01",
+      "family": "mixed_long_horizon",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.12,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "mixed_02",
+      "family": "mixed_long_horizon",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.122,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "mixed_03",
+      "family": "mixed_long_horizon",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.131,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    },
+    {
+      "task_id": "mixed_04",
+      "family": "mixed_long_horizon",
+      "pass": false,
+      "answer": null,
+      "raw": "",
+      "usage": {},
+      "elapsed_s": 0.164,
+      "http_ok": false,
+      "error": "RuntimeError('Gemini HTTP 404: {\\n  \"error\": {\\n    \"code\": 404,\\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.\",\\n    \"status\": \"NOT_FOUND\"\\n  }\\n}\\n')"
+    }
+  ]
+}
