@@ -1,0 +1,111 @@
+name: Windows Semantics Probe 0001
+on:
+  push:
+    branches: [probe/windows-semantics-0001]
+permissions: {}
+concurrency:
+  group: public-windows-semantics-probe-0001
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: windows-2025
+    timeout-minutes: 12
+    steps:
+      - name: Build and observe
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $d=Join-Path $env:RUNNER_TEMP 'winsem0001'
+          New-Item -ItemType Directory -Force $d|Out-Null
+          Set-Location $d
+          $vswhere="${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          if(!(Test-Path $vswhere)){throw 'vswhere missing'}
+          $vs=& $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if(!$vs){throw 'MSVC missing'}
+          $vc=Join-Path $vs 'VC\Auxiliary\Build\vcvars64.bat'
+          if(!(Test-Path $vc)){throw 'vcvars missing'}
+          Write-Host "RUNNER_OS=$env:RUNNER_OS"
+          Get-ComputerInfo|Select WindowsProductName,WindowsVersion,OsBuildNumber|Format-List
+          @'
+          #define WIN32_LEAN_AND_MEAN
+          #include <windows.h>
+          __declspec(dllexport) int probe_value(void){return 42;}
+          BOOL WINAPI DllMain(HINSTANCE h,DWORD r,LPVOID p){(void)h;(void)r;(void)p;return TRUE;}
+          '@|Set-Content probe.c -Encoding ascii
+          @'
+          #define WIN32_LEAN_AND_MEAN
+          #define _WIN32_WINNT 0x0A00
+          #include <windows.h>
+          #include <stdio.h>
+          #include <wchar.h>
+          __declspec(dllimport) int probe_value(void);
+          int wmain(int c,wchar_t**v){
+            int s=c>1&&wcscmp(v[1],L"system32")==0;
+            if(s){if(!SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_SYSTEM32)){wprintf(L"POLICY=0 ERR=%lu\n",GetLastError());return 20;}wprintf(L"POLICY=1\n");}
+            wprintf(L"TRIGGER=1\n");fflush(stdout);
+            int x=probe_value();wprintf(L"VALUE=%d\n",x);return x==42?0:21;
+          }
+          '@|Set-Content child.c -Encoding ascii
+          @'
+          #define WIN32_LEAN_AND_MEAN
+          #define _WIN32_WINNT 0x0A00
+          #include <windows.h>
+          #include <stdio.h>
+          #include <wchar.h>
+          static int fi(const wchar_t*p,BY_HANDLE_FILE_INFORMATION*i){HANDLE h=CreateFileW(p,FILE_READ_ATTRIBUTES,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,0,OPEN_EXISTING,0,0);if(h==INVALID_HANDLE_VALUE)return 0;BOOL o=GetFileInformationByHandle(h,i);CloseHandle(h);return o;}
+          int wmain(int c,wchar_t**v){
+            if(c!=4)return 2;const wchar_t*ch=v[1],*m=v[2];int strict=_wtoi(v[3])!=0;
+            BY_HANDLE_FILE_INFORMATION a={0},b={0};if(!fi(ch,&a))return 3;
+            SIZE_T n=0;LPPROC_THREAD_ATTRIBUTE_LIST al=0;DWORD64 pol=PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALWAYS_ON;
+            STARTUPINFOEXW si={0};si.StartupInfo.cb=sizeof(si);
+            if(strict){InitializeProcThreadAttributeList(0,1,0,&n);al=(LPPROC_THREAD_ATTRIBUTE_LIST)HeapAlloc(GetProcessHeap(),0,n);if(!al||!InitializeProcThreadAttributeList(al,1,0,&n)||!UpdateProcThreadAttribute(al,0,PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY,&pol,sizeof(pol),0,0))return 4;si.lpAttributeList=al;}
+            wchar_t cmd[4096];_snwprintf_s(cmd,_countof(cmd),_TRUNCATE,L"\"%ls\" %ls",ch,m);
+            PROCESS_INFORMATION pi={0};DWORD f=CREATE_SUSPENDED|(strict?EXTENDED_STARTUPINFO_PRESENT:0);
+            BOOL ok=CreateProcessW(ch,cmd,0,0,FALSE,f,0,0,&si.StartupInfo,&pi);
+            wprintf(L"CREATE=%d STRICT=%d ERR=%lu\n",ok?1:0,strict,ok?0:GetLastError());
+            if(!ok){if(al){DeleteProcThreadAttributeList(al);HeapFree(GetProcessHeap(),0,al);}return 0;}
+            wchar_t p[4096];DWORD z=_countof(p);if(!QueryFullProcessImageNameW(pi.hProcess,0,p,&z)||!fi(p,&b)){TerminateProcess(pi.hProcess,90);CloseHandle(pi.hThread);CloseHandle(pi.hProcess);return 5;}
+            wprintf(L"PRE_VOL=%lu PRE_HI=%lu PRE_LO=%lu\n",a.dwVolumeSerialNumber,a.nFileIndexHigh,a.nFileIndexLow);
+            wprintf(L"POST_VOL=%lu POST_HI=%lu POST_LO=%lu\n",b.dwVolumeSerialNumber,b.nFileIndexHigh,b.nFileIndexLow);
+            int id=a.dwVolumeSerialNumber==b.dwVolumeSerialNumber&&a.nFileIndexHigh==b.nFileIndexHigh&&a.nFileIndexLow==b.nFileIndexLow;wprintf(L"ID=%d\n",id);
+            if(ResumeThread(pi.hThread)==(DWORD)-1)return 6;if(WaitForSingleObject(pi.hProcess,30000)!=WAIT_OBJECT_0)return 7;
+            DWORD e=0;if(!GetExitCodeProcess(pi.hProcess,&e))return 8;wprintf(L"EXIT=%lu\n",e);
+            CloseHandle(pi.hThread);CloseHandle(pi.hProcess);if(al){DeleteProcThreadAttributeList(al);HeapFree(GetProcessHeap(),0,al);}return id?0:9;
+          }
+          '@|Set-Content launcher.c -Encoding ascii
+          $cmd=@"
+          call "$vc"
+          if errorlevel 1 exit /b 101
+          cl /nologo /W4 /WX /O2 /LD probe.c /Fe:probe.dll
+          if errorlevel 1 exit /b 102
+          cl /nologo /W4 /WX /O2 child.c /Fe:child.exe /link probe.lib delayimp.lib /DELAYLOAD:probe.dll
+          if errorlevel 1 exit /b 103
+          cl /nologo /W4 /WX /O2 launcher.c /Fe:launcher.exe
+          if errorlevel 1 exit /b 104
+          dumpbin /imports:probe.dll child.exe > probe-imports.txt
+          if errorlevel 1 exit /b 105
+          "@
+          Set-Content build.cmd $cmd -Encoding ascii
+          & cmd.exe /d /s /c "`"$d\build.cmd`""
+          if($LASTEXITCODE-ne 0){throw "build=$LASTEXITCODE"}
+          $cs=Get-AuthenticodeSignature .\child.exe;$ps=Get-AuthenticodeSignature .\probe.dll
+          if($cs.Status.ToString()-ne'NotSigned'-or$ps.Status.ToString()-ne'NotSigned'){throw 'unsigned precondition failed'}
+          Write-Host 'UNSIGNED=PASS'
+          $imp=Get-Content .\probe-imports.txt -Raw;Write-Host $imp
+          if($imp-notmatch'(?i)probe\.dll'-or$imp-notmatch'(?i)delay[^\r\n]*import|(?i)delay\s+load'){throw 'delay classification failed'}
+          Write-Host 'DELAY_CLASS=PASS'
+          Get-FileHash .\probe.dll,.\child.exe,.\launcher.exe -Algorithm SHA256|Format-Table -AutoSize
+          $collision=Join-Path $env:SystemRoot 'System32\probe.dll'
+          if(Test-Path $collision){throw 'System32 probe.dll collision'}
+          Write-Host 'SYS32_COLLISION=ABSENT'
+          function Obs($n,$m,$s){$o=(& .\launcher.exe (Resolve-Path .\child.exe).Path $m $s 2>&1|Out-String);Write-Host "=== $n ===";Write-Host $o;if($o-notmatch'CREATE=(0|1)'){throw "$n no create evidence"};return $o}
+          $c=Obs CONTROL control 0
+          if($c-notmatch'CREATE=1'-or$c-notmatch'ID=1'-or$c-notmatch'TRIGGER=1'-or$c-notmatch'VALUE=42'-or$c-notmatch'EXIT=0'){throw 'control failed'}
+          $s=Obs SYSTEM32_ONLY system32 0
+          if($s-notmatch'POLICY=1'-or$s-notmatch'TRIGGER=1'-or$s-match'EXIT=0'){throw 'system32 negative failed'}
+          Write-Host 'SYSTEM32_NEGATIVE=PASS'
+          $x=Obs MICROSOFT_SIGNED_ONLY control 1
+          Write-Host 'STRICT_RESULT=OBSERVATIONAL'
+          Write-Host 'NO_PRIVATE_SOURCE=YES'
+          Write-Host 'NO_SECRETS=YES'
+          Write-Host 'PROBE_COMPLETE=YES'
